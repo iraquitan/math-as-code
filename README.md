@@ -1,14 +1,12 @@
 # math-as-code
 
->[Chinese translation (中文版)](./README-zh.md)
-
-This is a reference to ease developers into mathematical notation by showing comparisons with JavaScript code.
+This is a reference to ease developers into mathematical notation by showing comparisons with Python code.
 
 Motivation: Academic papers can be intimidating for self-taught game and graphics programmers. :) 
 
 This guide is not yet finished. If you see errors or want to contribute, please [open a ticket](https://github.com/Jam3/math-as-code/issues) or send a PR.
 
-> **Note**: For brevity, some code examples make use of [npm packages](https://www.npmjs.com/). You can refer to their GitHub repos for implementation details.
+> **Note**: For brevity, some code examples make use of [pip libraries](https://pypi.org/). You can refer to their GitHub repos for implementation details.
 
 
 
@@ -73,21 +71,20 @@ There are a number of symbols resembling the equals sign `=`. Here are a few com
 - `≈` is for approximately equal to (`π ≈ 3.14159`)
 - `:=` is for definition (A is defined as B)
 
-In JavaScript:
+In Python:
 
-```js
-// equality
-2 === 3
+```python
+# equality
+>>> 2 == 3
+False
+# inequality
+>>> 2 != 3
+True
 
-// inequality
-2 !== 3
-
-// approximately equal
-almostEqual(Math.PI, 3.14159, 1e-5)
-
-function almostEqual(a, b, epsilon) {
-  return Math.abs(a - b) <= epsilon
-}
+# approximately equal
+>>> import cmath
+>>> cmath.isclose(cmath.pi, 3.14159, rel_tol=1e-5)
+True
 ```
 
 You might see the `:=`, `=:` and `=` symbols being used for *definition*.<sup>[1]</sup>
@@ -98,19 +95,13 @@ For example, the following defines *x* to be another name for 2*kj*.
 
 <!-- x := 2kj -->
 
-In JavaScript, we might use `var` to *define* our variables and provide aliases:
+In Python, there is no variable definition or declaration, to *define* our variables and provide aliases:
 
-```js
-var x = 2 * k * j
+```python
+x = 2 * k * j
 ```
 
 However, this is mutable, and only takes a snapshot of the values at that time. Some languages have pre-processor `#define` statements, which are closer to a mathematical *define*. 
-
-A more accurate *define* in JavaScript (ES6) might look a bit like this:
-
-```js
-const f = (k, j) => 2 * k * j
-```
 
 The following, on the other hand, represents equality:
 
@@ -118,10 +109,10 @@ The following, on the other hand, represents equality:
 
 <!-- x = 2kj -->
 
-The above equation might be interpreted in code as an [assertion](https://developer.mozilla.org/en-US/docs/Web/API/console/assert):
+The above equation might be interpreted in code as an [assertion](https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement):
 
-```js
-console.assert(x === (2 * k * j))
+```python
+assert x == (2 * k * j)
 ```
 
 ## square root and complex numbers
@@ -134,10 +125,11 @@ A square root operation is of the form:
 
 In programming we use a `sqrt` function, like so: 
 
-```js
-var x = 9;
-console.log(Math.sqrt(x));
-//=> 3
+```python
+>>> import math
+>>> x = 9
+>>> print(math.sqrt(x))
+3.0
 ```
 
 Complex numbers are expressions of the form ![complex](http://latex.codecogs.com/svg.latex?a&space;&plus;&space;ib), where ![a](http://latex.codecogs.com/svg.latex?a) is the real part and ![b](http://latex.codecogs.com/svg.latex?b) is the imaginary part. The imaginary number ![i](http://latex.codecogs.com/svg.latex?i) is defined as:
@@ -145,26 +137,23 @@ Complex numbers are expressions of the form ![complex](http://latex.codecogs.com
 ![imaginary](http://latex.codecogs.com/svg.latex?i%3D%5Csqrt%7B-1%7D).
 <!-- i=\sqrt{-1} -->
 
-In JavaScript, there is no built-in functionality for complex numbers, but there are some libraries that support complex number arithmetic. For example, using [mathjs](https://www.npmjs.com/package/mathjs):
+In Python, there is built-in functionality for complex numbers, but there are some libraries that support complex number arithmetic.
 
-```js
-var math = require('mathjs')
+```python
+>>> a = 3-1j
 
-var a = math.complex(3, -1)
-//=> { re: 3, im: -1 }
+>>> import cmath
+>>> b = cmath.sqrt(-1)
 
-var b = math.sqrt(-1)
-//=> { re: 0, im: -1 }
-
-console.log(math.multiply(a, b).toString())
-//=> '1 + 3i'
+>>> print(a * b)
+(1+3j)
 ```
 
-The library also supports evaluating a string expression, so the above could be re-written as:
+It also supports evaluating expression, so the above could be re-written as:
 
-```js
-console.log(math.eval('(3 - i) * i').toString())
-//=> '1 + 3i'
+```python
+>>> print(((3 - 1j) * 1j))
+(1+3j)
 ```
 
 Other implementations:
@@ -189,8 +178,8 @@ Both symbols can represent simple multiplication of scalars. The following are e
 
 In programming languages we tend to use asterisk for multiplication:
 
-```js
-var result = 5 * 4
+```python
+>>> result = 5 * 4
 ```
 
 Often, the multiplication sign is only used to avoid ambiguity (e.g. between two numbers). Here, we can omit it entirely:
@@ -201,8 +190,8 @@ Often, the multiplication sign is only used to avoid ambiguity (e.g. between two
 
 If these variables represent scalars, the code would be:
 
-```js
-var result = 3 * k * j
+```python
+>>> result = 3 * k * j
 ```
 
 #### vector multiplication
@@ -219,26 +208,25 @@ In other instances, the author might explicitly define a different notation, suc
 
 Here is how it would look in code, using arrays `[x, y]` to represent the 2D vectors.
 
-```js
-var s = 3
-var k = [ 1, 2 ]
-var j = [ 2, 3 ]
+```python
+>>> s = 3
+>>> k = [ 1, 2 ]
+>>> j = [ 2, 3 ]
 
-var tmp = multiply(k, j)
-var result = multiplyScalar(tmp, s)
-//=> [ 6, 18 ]
+>>> tmp = multiply(k, j)
+>>> result = multiplyScalar(tmp, s)
+>>> print(result)
+[ 6, 18 ]
 ```
 
 Our `multiply` and `multiplyScalar` functions look like this:
 
-```js
-function multiply(a, b) {
+```python
+def multiply(a, b):
   return [ a[0] * b[0], a[1] * b[1] ]
-}
 
-function multiplyScalar(a, scalar) {
+def multiply_scalar(a, scalar):
   return [ a[0] * scalar, a[1] * scalar ]
-}
 ```
 
 Similarly, matrix multiplication typically does not use the dot `·` or cross symbol `×`. Matrix multiplication will be covered in a later section.
@@ -253,21 +241,21 @@ The dot symbol `·` can be used to denote the [*dot product*](https://en.wikiped
 
 It is a very common feature of linear algebra, and with a 3D vector it might look like this:
 
-```js
-var k = [ 0, 1, 0 ]
-var j = [ 1, 0, 0 ]
+```python
+>>> k = [ 0, 1, 0 ]
+>>> j = [ 1, 0, 0 ]
 
-var d = dot(k, j)
-//=> 0
+>>> d = dot(k, j)
+0
 ```
 
 The result `0` tells us our vectors are perpendicular. Here is a `dot` function for 3-component vectors:
 
-```js
-function dot(a, b) {
+```python
+def dot(a, b):
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-}
 ```
+<!-- TODO: write about numpy -->
 
 #### cross product
 
