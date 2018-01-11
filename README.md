@@ -137,7 +137,10 @@ Complex numbers are expressions of the form ![complex](http://latex.codecogs.com
 ![imaginary](http://latex.codecogs.com/svg.latex?i%3D%5Csqrt%7B-1%7D).
 <!-- i=\sqrt{-1} -->
 
-In Python, there is built-in functionality for complex numbers, but there are some libraries that support complex number arithmetic.
+In Python, there is built-in functionality for complex numbers arithmetic. But it uses the engineering conventions for the imaginary number ![j](http://latex.codecogs.com/svg.latex?j) defined as:
+
+![imaginary](http://latex.codecogs.com/svg.latex?j%3Di%3D\sqrt{-1}).
+<!-- j=i=\sqrt{-1} -->
 
 ```python
 >>> a = 3-1j
@@ -152,15 +155,9 @@ In Python, there is built-in functionality for complex numbers, but there are so
 It also supports evaluating expression, so the above could be re-written as:
 
 ```python
->>> print(((3 - 1j) * 1j))
+>>> print((3 - 1j) * 1j)
 (1+3j)
 ```
-
-Other implementations:
-
-- [immutable-complex](https://www.npmjs.com/package/immutable-complex)
-- [complex-js](https://www.npmjs.com/package/complex-js)
-- [Numeric-js](http://www.numericjs.com/)
 
 ## dot & cross
 
@@ -210,23 +207,23 @@ Here is how it would look in code, using arrays `[x, y]` to represent the 2D vec
 
 ```python
 >>> s = 3
->>> k = [ 1, 2 ]
->>> j = [ 2, 3 ]
+>>> k = [1, 2]
+>>> j = [2, 3]
 
 >>> tmp = multiply(k, j)
->>> result = multiplyScalar(tmp, s)
+>>> result = multiply_scalar(tmp, s)
 >>> print(result)
-[ 6, 18 ]
+[6, 18]
 ```
 
-Our `multiply` and `multiplyScalar` functions look like this:
+Our `multiply` and `multiply_scalar` functions look like this:
 
 ```python
 def multiply(a, b):
-  return [ a[0] * b[0], a[1] * b[1] ]
+    return [a[0] * b[0], a[1] * b[1]]
 
 def multiply_scalar(a, scalar):
-  return [ a[0] * scalar, a[1] * scalar ]
+    return [a[0] * scalar, a[1] * scalar]
 ```
 
 Similarly, matrix multiplication typically does not use the dot `·` or cross symbol `×`. Matrix multiplication will be covered in a later section.
@@ -242,10 +239,11 @@ The dot symbol `·` can be used to denote the [*dot product*](https://en.wikiped
 It is a very common feature of linear algebra, and with a 3D vector it might look like this:
 
 ```python
->>> k = [ 0, 1, 0 ]
->>> j = [ 1, 0, 0 ]
+>>> k = [0, 1, 0]
+>>> j = [1, 0, 0]
 
 >>> d = dot(k, j)
+>>> print(d)
 0
 ```
 
@@ -253,7 +251,7 @@ The result `0` tells us our vectors are perpendicular. Here is a `dot` function 
 
 ```python
 def dot(a, b):
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
 ```
 <!-- TODO: write about numpy -->
 
@@ -267,37 +265,31 @@ The cross symbol `×` can be used to denote the [*cross product*](https://en.wik
 
 In code, it would look like this:
 
-```js
-var k = [ 0, 1, 0 ]
-var j = [ 1, 0, 0 ]
+```python
+>>> k = [0, 1, 0]
+>>> j = [1, 0, 0]
 
-var result = cross(k, j)
-//=> [ 0, 0, -1 ]
+>>> result = cross(k, j)
+>>> print(result)
+[0, 0, -1]
 ```
 
 Here, we get `[ 0, 0, -1 ]`, which is perpendicular to both **k** and **j**.
 
 Our `cross` function:
 
-```js
-function cross(a, b) {
-  var ax = a[0], ay = a[1], az = a[2],
-    bx = b[0], by = b[1], bz = b[2]
+```python
+def cross(a, b):
+    ax, ay, az = a[0], a[1], a[2]
+    bx, by, bz = b[0], b[1], b[2]
 
-  var rx = ay * bz - az * by
-  var ry = az * bx - ax * bz
-  var rz = ax * by - ay * bx
-  return [ rx, ry, rz ]
-}
+    rx = ay*bz - az*by
+    ry = az*bx - ax*bz
+    rz = ax*by - ay*bx
+    return [rx, ry, rz]
 ```
 
-For other implementations of vector multiplication, cross product, and dot product:
-
-- [gl-vec3](https://github.com/stackgl/gl-vec3)
-- [gl-vec2](https://github.com/stackgl/gl-vec2)
-- [vectors](https://github.com/hughsk/vectors) - includes n-dimensional
-
-## sigma 
+## sigma
 
 The big Greek `Σ` (Sigma) is for [Summation](https://en.wikipedia.org/wiki/Summation). In other words: summing up some numbers.
 
@@ -305,22 +297,25 @@ The big Greek `Σ` (Sigma) is for [Summation](https://en.wikipedia.org/wiki/Summ
 
 <!-- \sum_{i=1}^{100}i -->
 
-Here, `i=1` says to start at `1` and end at the number above the Sigma, `100`. These are the lower and upper bounds, respectively. The *i* to the right of the "E" tells us what we are summing. In code:
+Here, `i=1` says to start at `1` and end at the number above the Sigma, `100`. These are the lower and upper bounds, respectively. The *i* to the right of the "E" tells us what we are summing. In python, to iterate over a sequence of numbers, the built-in function `range()` comes in handy, but the given end point (`100` in our example) is never part of the generated sequence, so the above formula in python code becomes:
 
-```js
-var sum = 0
-for (var i = 1; i <= 100; i++) {
-  sum += i
-}
+```python
+>>> sum = 0
+>>> for i in range(1, 100+1):
+...     sum += i
+>>> print(sum)
+5050
 ```
 
 The result of `sum` is `5050`.
 
 **Tip:** With whole numbers, this particular pattern can be optimized to the following:
 
-```js
-var n = 100 // upper bound
-var sum = (n * (n + 1)) / 2
+```python
+>>> n = 100  # upper bound
+>>> sum = (n * (n+1)) / 2
+>>> print(sum)
+5050.0
 ```
 
 Here is another example where the *i*, or the "what to sum," is different:
@@ -331,11 +326,12 @@ Here is another example where the *i*, or the "what to sum," is different:
 
 In code:
 
-```js
-var sum = 0
-for (var i = 1; i <= 100; i++) {
-  sum += (2 * i + 1)
-}
+```python
+>>> sum = 0
+>>> for i in range(1, 100+1):
+...     sum += (2 * i + 1)
+>>> print(sum)
+10200
 ```
 
 The result of `sum` is `10200`.
@@ -348,20 +344,20 @@ The notation can be nested, which is much like nesting a `for` loop. You should 
 
 In code:
 
-```js
-var sum = 0
-for (var i = 1; i <= 2; i++) {
-  for (var j = 4; j <= 6; j++) {
-    sum += (3 * i * j)
-  }
-}
+```python
+>>> sum = 0
+>>> for i in range(1, 2+1):
+...     for j in range(4, 6+1):
+...         sum += (3 * i * j)
+>>> print(sum)
+135
 ```
 
 Here, `sum` will be `135`.
 
 ## capital Pi
 
-The capital Pi or "Big Pi" is very similar to [Sigma](#sigma), except we are using multiplication to find the product of a sequence of values. 
+The capital Pi or "Big Pi" is very similar to [Sigma](#sigma), except we are using multiplication to find the product of a sequence of values.
 
 Take the following:
 
@@ -371,11 +367,12 @@ Take the following:
 
 In code, it might look like this:
 
-```js
-var value = 1
-for (var i = 1; i <= 6; i++) {
-  value *= i
-}
+```python
+>>> value = 1
+>>> for i in range(1, 6+1):
+...     value *= i
+>>> print(value)
+720
 ```
 
 Where `value` will evaluate to `720`.
@@ -394,10 +391,11 @@ These three features all describe the *length* of an object.
 
 For a number *x*, `|x|` means the absolute value of *x*. In code:
 
-```js
-var x = -5
-var result = Math.abs(x)
-// => 5
+```python
+>>> x = -5
+>>> result = abs(x)
+>>> print(result)
+5
 ```
 
 #### Euclidean norm
@@ -416,21 +414,21 @@ Often this is represented by double-bars to avoid ambiguity with the *absolute v
 
 Here is an example using an array `[x, y, z]` to represent a 3D vector.
 
-```js
-var v = [ 0, 4, -3 ]
-length(v)
-//=> 5
+```python
+>>> v = [0, 4, -3]
+>>> print(length(v))
+5.0
 ```
 
 The `length` function:
 
-```js
-function length (vec) {
-  var x = vec[0]
-  var y = vec[1]
-  var z = vec[2]
-  return Math.sqrt(x * x + y * y + z * z)
-}
+```python
+def length(vec):
+    import math
+    x = vec[0]
+    y = vec[1]
+    z = vec[2]
+    return math.sqrt(x**2 + y**2 + z**2)
 ```
 
 Other implementations:
