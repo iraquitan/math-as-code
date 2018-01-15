@@ -447,12 +447,13 @@ For a matrix **A**, `|A|` means the [determinant](https://en.wikipedia.org/wiki/
 
 Here is an example computing the determinant of a 2x2 matrix, represented by a flat array in column-major format.
 
-```js
-var determinant = require('gl-mat2/determinant')
+```python
+>>> import numpy as np
 
-var matrix = [ 1, 0, 0, 1 ]
-var det = determinant(matrix)
-//=> 1
+>>> matrix = np.reshape([1, 0, 0, 1], (2, 2))
+>>> det = np.linalg.det(matrix)
+>>> print(det)
+1.0
 ```
 
 Implementations:
@@ -473,29 +474,28 @@ In geometry, the "hat" symbol above a character is used to represent a [unit vec
 
 In Cartesian space, a unit vector is typically length 1. That means each part of the vector will be in the range of -1.0 to 1.0. Here we *normalize* a 3D vector into a unit vector:
 
-```js
-var a = [ 0, 4, -3 ]
-normalize(a)
-//=> [ 0, 0.8, -0.6 ]
+```python
+>>> a = [ 0, 4, -3 ]
+>>> print(normalize(a))
+[0, 0.8, -0.6]
 ```
 
 Here is the `normalize` function, operating on 3D vectors:
 
-```js
-function normalize(vec) {
-  var x = vec[0]
-  var y = vec[1]
-  var z = vec[2]
-  var squaredLength = x * x + y * y + z * z
+```python
+def normalize(vec):
+    import math
+    x = vec[0]
+    y = vec[1]
+    z = vec[2]
+    squared_length = x**2 + y**2 + z**2
 
-  if (squaredLength > 0) {
-    var length = Math.sqrt(squaredLength)
-    vec[0] = vec[0] / length
-    vec[1] = vec[1] / length
-    vec[2] = vec[2] / length
-  }
-  return vec
-}
+    if squared_length > 0:
+        length = math.sqrt(squared_length)
+        vec[0] = vec[0] / length
+        vec[1] = vec[1] / length
+        vec[2] = vec[2] / length
+    return vec
 ```
 
 Other implementations:
@@ -513,22 +513,22 @@ In set theory, the "element of" symbol `∈` and `∋` can be used to describe w
 
 Here we have a set of numbers *A* `{ 3, 9, 14 }` and we are saying `3` is an "element of" that set. 
 
-A simple implementation in ES5 might look like this:
+A simple implementation in python might look like this:
 
-```js
-var A = [ 3, 9, 14 ]
+```python
+>>> A = [3, 9, 14]
 
-A.indexOf(3) >= 0
-//=> true
+>>> 3 in A
+True
 ```
 
-However, it would be more accurate to use a `Set` which only holds unique values. This is a feature of ES6.
+However, it would be more accurate to use a `set` which only holds unique values.
 
-```js
-var A = new Set([ 3, 9, 14 ])
+```python
+>>> A = set([3, 9, 14])
 
-A.has(3)
-//=> true
+>>> 3 in A
+True
 ```
 
 The backwards `∋` is the same, but the order changes:
